@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Resolve Together — Gregg & Anna</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --bg: #0c0b10;
+    --surface: #16151e;
+    --surface2: #1e1d29;
+    --surface3: #262533;
+    --border: #2e2d3d;
+    --text: #ede9f5;
+    --text-dim: #9590ab;
+    --warm: #e8926a;
+    --cool: #7b8cde;
+    --rose: #c7508f;
+    --green: #6abf8a;
+    --gold: #d4a843;
+    --gradient-warm: linear-gradient(135deg, #e8926a, #e07a5f);
+    --gradient-cool: linear-gradient(135deg, #7b8cde, #6a7fd2);
+    --gradient-blush: linear-gradient(135deg, #e07a5f, #c7508f);
+    --radius: 18px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%; left: -20%;
+    width: 140%; height: 160%;
+    background:
+      radial-gradient(ellipse at 25% 15%, rgba(232,146,106,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 85%, rgba(123,140,222,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(199,80,143,0.02) 0%, transparent 60%);
+    animation: glowDrift 25s ease infinite alternate;
+    pointer-events: none; z-index: -1;
+  }
+  @keyframes glowDrift { from { transform: translate(0,0) scale(1); } to { transform: translate(-2%, 2%) scale(1.03); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ========== LANDING ========== */
+  .landing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; min-height: 100dvh;
+    padding: 40px 24px;
+    text-align: center;
+    animation: fadeIn 1s ease;
+  }
+  .landing.hidden { display: none; }
+
+  .landing-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 600;
+    background: var(--gradient-blush);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  .landing-sub {
+    font-size: clamp(0.68rem, 2vw, 0.78rem);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  .landing-note {
+    max-width: 440px;
+    color: var(--text-dim);
+    font-size: clamp(0.82rem, 2.2vw, 0.88rem);
+    line-height: 1.8;
+    margin-bottom: 40px;
+    padding: 0 8px;
+  }
+
+  .deck-chooser {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .deck-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 160px;
+    max-width: 200px;
+    flex: 1;
+    min-height: 48px;
+  }
+  .deck-btn:hover { transform: translateY(-2px); }
+  .deck-btn:active { transform: translateY(0); }
+  .deck-btn.warm:hover, .deck-btn.warm:focus { border-color: var(--warm); box-shadow: 0 4px 24px rgba(232,146,106,0.2); }
+  .deck-btn.cool:hover, .deck-btn.cool:focus { border-color: var(--cool); box-shadow: 0 4px 24px rgba(123,140,222,0.2); }
+
+  .deck-btn-label {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 3vw, 1.15rem);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .deck-btn.warm .deck-btn-label { color: var(--warm); }
+  .deck-btn.cool .deck-btn-label { color: var(--cool); }
+  .deck-btn-desc {
+    font-size: clamp(0.72rem, 2vw, 0.78rem);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .capture-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-top: 32px;
+    max-width: 420px;
+    font-size: clamp(0.76rem, 2vw, 0.82rem);
+    color: var(--text-dim);
+    line-height: 1.5;
+    text-align: left;
+  }
+  .capture-hint strong { color: var(--text); }
+  .capture-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  /* ========== APP ========== */
+  .app { display: none; animation: fadeUp 0.6s ease; }
+  .app.visible { display: block; }
+
+  .app-header {
+    text-align: center;
+    padding: 32px 20px 20px;
+  }
+  .app-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .app-header.warm h1 { color: var(--warm); }
+  .app-header.cool h1 { color: var(--cool); }
+  .app-header-sub {
+    font-size: clamp(0.65rem, 1.8vw, 0.72rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+  }
+
+  /* PROGRESS BAR */
+  .prog-wrap {
+    padding: 0 20px;
+    max-width: 600px;
+    margin: 0 auto 4px;
+  }
+  .prog-bar {
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  .prog-fill.warm { background: var(--gradient-warm); }
+  .prog-fill.cool { background: var(--gradient-cool); }
+
+  .prog-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: clamp(0.6rem, 1.7vw, 0.68rem);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* PHASE DOTS */
+  .phase-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 12px 8px;
+    flex-wrap: wrap;
+  }
+  .phase-pill {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: clamp(0.56rem, 1.5vw, 0.64rem);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all 0.4s ease;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .phase-pill.active.warm { background: rgba(232,146,106,0.12); color: var(--warm); border-color: rgba(232,146,106,0.3); }
+  .phase-pill.active.cool { background: rgba(123,140,222,0.12); color: var(--cool); border-color: rgba(123,140,222,0.3); }
+
+  /* CARD */
+  .card-wrap { max-width: 600px; margin: 0 auto; padding: 8px 16px 100px; }
+
+  .resolve-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(24px, 5vw, 36px) clamp(18px, 4vw, 28px);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: border-color 0.4s ease;
+  }
+  .resolve-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .resolve-card.warm { border-color: rgba(232,146,106,0.12); }
+  .resolve-card.warm::before { background: var(--gradient-warm); }
+  .resolve-card.cool { border-color: rgba(123,140,222,0.12); }
+  .resolve-card.cool::before { background: var(--gradient-cool); }
+
+  .card-step {
+    font-size: clamp(0.56rem, 1.5vw, 0.62rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.15rem, 3.5vw, 1.35rem);
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.35;
+  }
+  .card-title.warm { color: var(--warm); }
+  .card-title.cool { color: var(--cool); }
+
+  .card-body {
+    font-size: clamp(0.84rem, 2.2vw, 0.9rem);
+    line-height: 1.75;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .try-box {
+    background: var(--surface2);
+    border-left: 3px solid;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+  }
+  .try-box.warm { border-left-color: var(--warm); }
+  .try-box.cool { border-left-color: var(--cool); }
+  .try-label {
+    font-size: clamp(0.6rem, 1.6vw, 0.66rem);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .try-label.warm { color: var(--warm); }
+  .try-label.cool { color: var(--cool); }
+  .try-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(0.88rem, 2.4vw, 0.95rem);
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .why-box {
+    background: rgba(106,191,138,0.06);
+    border: 1px solid rgba(106,191,138,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .why-label {
+    font-size: clamp(0.58rem, 1.5vw, 0.64rem);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .why-text {
+    font-size: clamp(0.78rem, 2vw, 0.84rem);
+    line-height: 1.65;
+    color: var(--text-dim);
+  }
+
+  /* BUTTONS */
+  .nav-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    padding: 14px 28px;
+    border-radius: 999px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.82rem, 2.2vw, 0.85rem);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 48px;
+    min-width: 100px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-btn.fwd.warm { background: var(--gradient-warm); color: #fff; box-shadow: 0 3px 18px rgba(232,146,106,0.25); }
+  .nav-btn.fwd.cool { background: var(--gradient-cool); color: #fff; box-shadow: 0 3px 18px rgba(123,140,222,0.25); }
+  .nav-btn.fwd:active { transform: translateY(0); }
+  .nav-btn.back {
+    background: var(--surface2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .nav-btn.back:active { background: var(--surface3); }
+
+  .home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 24px;
+    padding: 10px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-dim);
+    font-size: clamp(0.76rem, 2vw, 0.82rem);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 44px;
+  }
+  .home-btn:hover { background: var(--surface3); color: var(--text); }
+
+  /* FINALE */
+  .finale {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+    animation: fadeUp 0.8s ease;
+  }
+  .finale.visible { display: block; }
+  .finale h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4.5vw, 1.8rem);
+    margin-bottom: 16px;
+  }
+  .finale h2.warm { color: var(--warm); }
+  .finale h2.cool { color: var(--cool); }
+  .finale p {
+    color: var(--text-dim);
+    font-size: clamp(0.85rem, 2.4vw, 0.92rem);
+    line-height: 1.8;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 0 8px;
+  }
+  .finale .capture-hint { margin: 24px auto 0; }
+
+  /* MOBILE BREAKPOINTS */
+  @media (max-width: 600px) {
+    .app-header { padding: 24px 16px 16px; }
+    .prog-wrap { padding: 0 16px; }
+    .phase-row { gap: 4px; padding: 12px 8px 6px; }
+    .phase-pill { padding: 4px 9px; }
+    .card-wrap { padding: 8px 12px 100px; }
+    .deck-chooser { gap: 12px; }
+    .deck-btn { padding: 22px 24px; min-width: 140px; }
+    .landing { padding: 32px 16px; }
+    .capture-hint { padding: 12px 16px; margin-left: 8px; margin-right: 8px; }
+  }
+  @media (max-width: 380px) {
+    .phase-pill { padding: 3px 7px; font-size: 0.52rem; letter-spacing: 0.5px; }
+    .nav-btn { padding: 12px 22px; min-height: 44px; }
+    .deck-btn { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== LANDING ========== -->
+<div class="landing" id="landing">
+  <div class="landing-title">Resolve Together</div>
+  <div class="landing-sub">Gregg & Anna</div>
+  <div class="landing-note">
+    A guided path through conflict — built around how each of you actually operates.
+    Pick whose issue it is. The cards walk you through it step by step.
+    <br><br>
+    Not therapy. Just a better way to fight.
+  </div>
+  <div class="deck-chooser">
+    <div class="deck-btn warm" onclick="startDeck('gregg')">
+      <div class="deck-btn-label">Gregg's Deck</div>
+      <div class="deck-btn-desc">When Gregg has something to bring up</div>
+    </div>
+    <div class="deck-btn cool" onclick="startDeck('anna')">
+      <div class="deck-btn-label">Anna's Deck</div>
+      <div class="deck-btn-desc">When Anna has something to bring up</div>
+    </div>
+  </div>
+  <div class="capture-hint">
+    <span class="capture-icon">&#x1f4dd;</span>
+    <span>If something lands, open <strong>Apple Notes</strong> or <strong>Voice Memo</strong> to capture it. Nothing here saves.</span>
+  </div>
+</div>
+
+<!-- ========== APP ========== -->
+<div class="app" id="app">
+  <div class="app-header" id="appHeader">
+    <h1 id="deckTitle"></h1>
+    <div class="app-header-sub" id="deckSub"></div>
+  </div>
+
+  <div class="phase-row" id="phaseRow"></div>
+
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:12.5%"></div></div>
+    <div class="prog-label">
+      <span id="progPhase">Prepare</span>
+      <span id="progCount">1 of 8</span>
+    </div>
+  </div>
+
+  <div class="card-wrap">
+    <div class="resolve-card" id="card">
+      <div class="card-step" id="cardStep"></div>
+      <div class="card-title" id="cardTitle"></div>
+      <div class="card-body" id="cardBody"></div>
+      <div id="tryArea"></div>
+      <div id="whyArea"></div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn back" id="backBtn" onclick="prev()" style="display:none">&#x2190; Back</button>
+      <button class="nav-btn fwd" id="fwdBtn" onclick="next()">Next &#x2192;</button>
+    </div>
+  </div>
+
+  <div class="finale" id="finale">
+    <h2 id="finaleTitle"></h2>
+    <p id="finaleText"></p>
+    <div class="capture-hint" style="margin:24px auto 0;">
+      <span class="capture-icon">&#x1f4dd;</span>
+      <span>Capture any commitments in <strong>Apple Notes</strong> so they stick.</span>
+    </div>
+    <button class="home-btn" onclick="goHome()">&#x2190; Back to Decks</button>
+  </div>
+</div>
+
+<script>
+const decks = {
+  gregg: {
+    title: "Gregg's Deck",
+    sub: "When you have something to bring to Anna",
+    finaleTitle: "You Did the Hard Part",
+    finaleText: "You slowed down, led with feeling, and gave her room. That's not your default \u2014 and that's exactly why it matters. Whatever you decided together, you decided <em>together</em>.",
+    phases: ["Prepare","Prepare","Open","Open","Listen","Listen","Resolve","Resolve"],
+    cards: [
+      {
+        step: "Step 1 \u2014 Prepare",
+        title: "Slow Down Before You Launch",
+        body: "Your instinct is to name the problem and drive toward a fix. That\u2019s your superpower in most of life. In conflict with Anna, it\u2019s a liability. She needs to feel safe before she can hear the content. If you come in hot, she\u2019ll go quiet \u2014 and quiet doesn\u2019t mean agreement.",
+        tryText: "\u201cI want to talk about something that\u2019s been on my mind. Can we sit down tonight after dinner?\u201d",
+        why: "Anna\u2019s profile shows she processes internally before responding. Scheduling lets her prepare rather than being ambushed, which activates her best thinking instead of her caution response."
+      },
+      {
+        step: "Step 2 \u2014 Prepare",
+        title: "Check Your Story",
+        body: "Before you say anything, ask yourself: what\u2019s the story I\u2019m telling myself about this? Is it \u201cAnna doesn\u2019t care about X\u201d or is it \u201cI need something and I haven\u2019t asked clearly enough\u201d? The first framing creates a defendant. The second creates a partner.",
+        why: "Your dominance score (+1.33\u03c3) means you\u2019re naturally decisive and form conclusions quickly. Anna\u2019s collaborative wiring (-0.77\u03c3) means she\u2019s likely already trying to help \u2014 she may just not know what you need."
+      },
+      {
+        step: "Step 3 \u2014 Open",
+        title: "Lead with Feeling, Not Verdict",
+        body: "Start with how you feel, not what she did. \u201cI\u2019ve been frustrated about...\u201d lands completely different than \u201cYou keep doing...\u201d The first one invites partnership. The second one creates a courtroom.",
+        tryText: "\u201cI\u2019ve been feeling [frustrated / disconnected / worried] about [topic], and I want to work through it with you.\u201d",
+        why: "Anna is sensitive to criticism (it\u2019s in her caution areas). Leading with feeling rather than accusation keeps her collaborative instinct engaged instead of triggering withdrawal."
+      },
+      {
+        step: "Step 4 \u2014 Open",
+        title: "Give Her the Floor",
+        body: "After you\u2019ve said your piece, stop. Actually stop. Count to five in your head if you have to. Your natural pace is faster than hers. If you fill every silence, she\u2019ll stop trying to get a word in \u2014 and she won\u2019t fight for airtime. She\u2019ll just go quiet.",
+        tryText: "\u201cThat\u2019s what I\u2019m feeling. What\u2019s your honest take?\u201d",
+        why: "Anna\u2019s reservation (-0.52\u03c3 extraversion) means she won\u2019t compete for speaking time. Your formality score (-1.82\u03c3) means you\u2019re comfortable being spontaneous and direct \u2014 which can overwhelm her. The pause is a gift."
+      },
+      {
+        step: "Step 5 \u2014 Listen",
+        title: "Her Thoroughness Is Intel",
+        body: "When Anna raises concerns, asks \u201cbut what about...?\u201d or wants to talk through details \u2014 that\u2019s not foot-dragging. That\u2019s her protecting both of you. The fastest way to shut down your partnership is to treat her diligence as obstruction.",
+        why: "Anna\u2019s high precision score means she literally sees risks and details you don\u2019t. Your very low formality (-1.82\u03c3) means details feel like friction to you. This is exactly where you\u2019re stronger together than apart."
+      },
+      {
+        step: "Step 6 \u2014 Listen",
+        title: "Find the Real Issue",
+        body: "Most fights are about one of two things: an information gap (one of you has context the other doesn\u2019t) or a values gap (you agree on the facts but disagree on what matters). Name which one you\u2019re dealing with. Information gaps need sharing. Values gaps need a conversation about priorities.",
+        tryText: "\u201cAre we disagreeing on the facts here, or do we just prioritize different things?\u201d",
+        why: "Your objectivity (+0.93\u03c3) makes you strong at analytical framing. Use that strength here \u2014 diagnose the type of disagreement rather than just pushing harder on your position."
+      },
+      {
+        step: "Step 7 \u2014 Resolve",
+        title: "Name the Actual Ask",
+        body: "Don\u2019t end with a vague \u201cI just want things to be better.\u201d Name what you need. Be specific. Anna works best with clear requests and defined expectations. A concrete ask gives her something to work with \u2014 not a puzzle to solve.",
+        tryText: "\u201cWhat I need is [specific request]. Does that work for you, or can we find something that works for both of us?\u201d",
+        why: "Anna is motivated by clear standards, expectations, and measurements. Ambiguity is her biggest friction area. A specific ask plays to her strength, not against it."
+      },
+      {
+        step: "Step 8 \u2014 Resolve",
+        title: "Close with Goal + Plan",
+        body: "End every important conversation by naming both: the goal (what you\u2019re aiming for) and the plan (the next concrete step). You focus on the goal; Anna focuses on the plan. Name both. This one habit bridges your biggest gap.",
+        tryText: "\u201cSo we\u2019re aiming for [goal], and the next step is [specific action] by [timeframe]. Sound right?\u201d",
+        why: "Your profiles are nearly 3 standard deviations apart on formality. You think in destinations; she thinks in routes. Naming both means you both walk away aligned."
+      }
+    ]
+  },
+  anna: {
+    title: "Anna's Deck",
+    sub: "When you have something to bring to Gregg",
+    finaleTitle: "You Said the Thing",
+    finaleText: "You named it, said it directly, and held your ground. That takes real courage for someone whose instinct is to keep the peace. Whatever you decided together, your voice was in it.",
+    phases: ["Prepare","Prepare","Open","Open","Hold","Hold","Resolve","Resolve"],
+    cards: [
+      {
+        step: "Step 1 \u2014 Prepare",
+        title: "Name It to Yourself First",
+        body: "Before you bring it to Gregg, get clear on what you actually need. Not the details of what happened \u2014 the feeling underneath. Are you frustrated? Hurt? Worried? Feeling overlooked? Name the real thing. That\u2019s what the conversation is actually about.",
+        why: "Your balanced objectivity (+0.03\u03c3) means you can flex between analytical and gut reasoning. Trust that. The feeling is data too."
+      },
+      {
+        step: "Step 2 \u2014 Prepare",
+        title: "Schedule It \u2014 Don't Hope He Notices",
+        body: "Gregg is forward-focused. His attention is genuinely on what\u2019s next, not what\u2019s behind him. He\u2019s not being insensitive \u2014 his wiring literally scans for the horizon. Hinting, hoping he\u2019ll notice, or waiting for him to ask will not work. Say the thing.",
+        tryText: "\u201cI need to talk about something. Can we make time tonight?\u201d",
+        why: "Gregg\u2019s dominance (+1.33\u03c3) and low formality (-1.82\u03c3) mean he\u2019s naturally wired to move fast and focus forward. He\u2019s not ignoring you \u2014 he may genuinely not see what\u2019s behind him. Directness is a kindness here."
+      },
+      {
+        step: "Step 3 \u2014 Open",
+        title: "Lead with the Big Picture",
+        body: "Start with why this matters, not the specifics of what happened. Gregg\u2019s attention locks onto vision and impact. If you lead with details, he may zone out before you get to the part he cares about. Start high, then zoom in.",
+        tryText: "\u201cThis matters to me because [big picture reason]. Here\u2019s what happened specifically...\u201d",
+        why: "Gregg\u2019s profile shows he\u2019s better at engaging with intangibles and big ideas than highly specific details. Framing the \u201cwhy\u201d first hooks his attention in the right place."
+      },
+      {
+        step: "Step 4 \u2014 Open",
+        title: "Say the Thing",
+        body: "Your instinct may be to soften, hint, or frame it so carefully that the actual point gets buried. Gregg respects directness. He\u2019d rather hear the real thing said plainly than spend twenty minutes trying to decode a gentle version. Being direct is not being harsh \u2014 it\u2019s being clear.",
+        tryText: "\u201cWhat I need to say directly is: [the thing].\u201d",
+        why: "Your profile shows you may avoid conflict and be sensitive to creating tension. But Gregg\u2019s wiring respects straight talk. The directness that feels risky to you is actually the language he trusts most."
+      },
+      {
+        step: "Step 5 \u2014 Hold",
+        title: "Hold Your Ground",
+        body: "Gregg is persuasive. His influencing style is authoritative, enthusiastic, and comfortable thinking on the spot. If you feel your concern getting steamrolled by his energy, that\u2019s a signal to plant your feet, not to back down. Your perspective matters, even if his comes with more volume.",
+        tryText: "\u201cI hear you, and I still need you to hear this part.\u201d",
+        why: "Gregg\u2019s caution area is that he may dominate the agenda. Your caution area is that you may avoid conflict. This is the exact moment where you override your default for the good of the relationship."
+      },
+      {
+        step: "Step 6 \u2014 Hold",
+        title: "It's Okay to Pause \u2014 Just Say It Out Loud",
+        body: "If you feel overwhelmed or need time to think, that\u2019s completely fine. But going quiet without saying why will confuse Gregg. He won\u2019t read the signal. Name the pause so he can work with it instead of pushing harder (which is his instinct when he senses withdrawal).",
+        tryText: "\u201cI need to think about this \u2014 can we come back to it tomorrow?\u201d",
+        why: "The relationship assessment specifically flags this: Anna may politely seek to shorten or avoid interaction when overwhelmed. Gregg\u2019s instinct is to push. Naming the pause breaks the cycle."
+      },
+      {
+        step: "Step 7 \u2014 Resolve",
+        title: "Name What You Need \u2014 Specifically",
+        body: "Be as specific as you\u2019d want someone to be with you. Not \u201cI need you to be more present\u201d but \u201cI need you to put your phone away during dinner.\u201d Gregg\u2019s wiring responds to clear, concrete requests. Vague asks give him nothing to act on, and he\u2019ll default to what he was already doing.",
+        tryText: "\u201cSpecifically, what I\u2019m asking for is [concrete request].\u201d",
+        why: "Your strength is precision and specificity. Use it here. Gregg\u2019s low formality means he won\u2019t fill in ambiguous blanks the way you hope. Specific asks get specific results."
+      },
+      {
+        step: "Step 8 \u2014 Resolve",
+        title: "Close Together \u2014 Goal + Plan",
+        body: "Before you walk away, name what you both agreed to: the goal and the next step. You\u2019re naturally strong at translating ideas into plans. Use that strength to close the loop. Otherwise, Gregg walks away feeling resolved and you walk away with an unnamed to-do list.",
+        tryText: "\u201cSo we\u2019re aiming for [goal], and the next step is [action] by [when]. Right?\u201d",
+        why: "Gregg focuses on destinations; you focus on routes. Naming both is how you stay on the same path. This single habit prevents more repeat arguments than anything else."
+      }
+    ]
+  }
+};
+
+let activeDeck = null;
+let current = 0;
+
+function startDeck(who) {
+  activeDeck = who;
+  current = 0;
+  const d = decks[who];
+  const tone = who === 'gregg' ? 'warm' : 'cool';
+
+  document.getElementById('landing').classList.add('hidden');
+  const app = document.getElementById('app');
+  app.classList.add('visible');
+
+  const header = document.getElementById('appHeader');
+  header.className = 'app-header ' + tone;
+  document.getElementById('deckTitle').textContent = d.title;
+  document.getElementById('deckSub').textContent = d.sub;
+
+  // Build phase pills
+  const uniquePhases = [...new Set(d.phases)];
+  const row = document.getElementById('phaseRow');
+  row.innerHTML = uniquePhases.map(p => `<div class="phase-pill" data-phase="${p}">${p}</div>`).join('');
+
+  document.getElementById('progFill').className = 'prog-fill ' + tone;
+  renderCard();
+}
+
+function renderCard() {
+  const d = decks[activeDeck];
+  const c = d.cards[current];
+  const tone = activeDeck === 'gregg' ? 'warm' : 'cool';
+  const total = d.cards.length;
+
+  const card = document.getElementById('card');
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(10px)';
+
+  setTimeout(() => {
+    card.className = 'resolve-card ' + tone;
+    document.getElementById('cardStep').textContent = c.step;
+
+    const titleEl = document.getElementById('cardTitle');
+    titleEl.textContent = c.title;
+    titleEl.className = 'card-title ' + tone;
+
+    document.getElementById('cardBody').textContent = c.body;
+
+    // Try box
+    const tryArea = document.getElementById('tryArea');
+    if (c.tryText) {
+      tryArea.innerHTML = `<div class="try-box ${tone}"><div class="try-label ${tone}">Try saying</div><div class="try-text">${c.tryText}</div></div>`;
+    } else {
+      tryArea.innerHTML = '';
+    }
+
+    // Why box
+    document.getElementById('whyArea').innerHTML = `<div class="why-box"><div class="why-label">Why this matters for you two</div><div class="why-text">${c.why}</div></div>`;
+
+    // Progress
+    document.getElementById('progFill').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('progPhase').textContent = d.phases[current];
+    document.getElementById('progCount').textContent = `${current + 1} of ${total}`;
+
+    // Phase pills
+    document.querySelectorAll('.phase-pill').forEach(p => {
+      p.classList.remove('active', 'warm', 'cool');
+      if (p.dataset.phase === d.phases[current]) {
+        p.classList.add('active', tone);
+      }
+    });
+
+    // Buttons
+    document.getElementById('backBtn').style.display = current > 0 ? 'inline-flex' : 'none';
+    const fwd = document.getElementById('fwdBtn');
+    fwd.className = 'nav-btn fwd ' + tone;
+    fwd.textContent = current === total - 1 ? 'Finish' : 'Next \u2192';
+
+    card.style.transition = 'all 0.4s ease';
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 200);
+}
+
+function next() {
+  const d = decks[activeDeck];
+  if (current < d.cards.length - 1) {
+    current++;
+    renderCard();
+  } else {
+    const tone = activeDeck === 'gregg' ? 'warm' : 'cool';
+    document.querySelector('.card-wrap').style.display = 'none';
+    document.querySelector('.prog-wrap').style.display = 'none';
+    document.getElementById('phaseRow').style.display = 'none';
+
+    const finale = document.getElementById('finale');
+    const fTitle = document.getElementById('finaleTitle');
+    fTitle.textContent = d.finaleTitle;
+    fTitle.className = tone;
+    document.getElementById('finaleText').innerHTML = d.finaleText;
+    finale.classList.add('visible');
+  }
+}
+
+function prev() {
+  if (current > 0) { current--; renderCard(); }
+}
+
+function goHome() {
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('finale').classList.remove('visible');
+  document.querySelector('.card-wrap').style.display = '';
+  document.querySelector('.prog-wrap').style.display = '';
+  document.getElementById('phaseRow').style.display = '';
+  document.getElementById('landing').classList.remove('hidden');
+  activeDeck = null;
+  current = 0;
+}
+</script>
+</body>
+</html>

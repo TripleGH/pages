@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>One Year — Gregg & Anna</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --bg: #0c0b10;
+    --surface: #16151e;
+    --surface2: #1e1d29;
+    --surface3: #262533;
+    --border: #2e2d3d;
+    --text: #ede9f5;
+    --text-dim: #9590ab;
+    --blush: #e07a5f;
+    --rose: #c7508f;
+    --plum: #9b59b6;
+    --lavender: #8e7cc3;
+    --gold: #d4a843;
+    --gradient-blush: linear-gradient(135deg, #e07a5f, #c7508f);
+    --gradient-deep: linear-gradient(135deg, #c7508f, #9b59b6);
+    --gradient-gold: linear-gradient(135deg, #d4a843, #e07a5f);
+    --radius: 18px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%; left: -20%;
+    width: 140%; height: 160%;
+    background:
+      radial-gradient(ellipse at 25% 15%, rgba(224,122,95,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 85%, rgba(155,89,182,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(199,80,143,0.02) 0%, transparent 60%);
+    animation: glowDrift 25s ease infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+  }
+  @keyframes glowDrift {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(-2%, 2%) scale(1.03); }
+  }
+
+  /* INTRO */
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 40px 24px;
+    text-align: center;
+    animation: fadeIn 1.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .intro.hidden { display: none; }
+
+  .year-badge {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 5rem);
+    font-weight: 600;
+    background: var(--gradient-blush);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .intro-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .intro-names {
+    font-size: clamp(0.68rem, 2vw, 0.78rem);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    margin-bottom: 48px;
+    font-weight: 500;
+  }
+  .intro-note {
+    max-width: 420px;
+    color: var(--text-dim);
+    font-size: clamp(0.82rem, 2.2vw, 0.88rem);
+    line-height: 1.8;
+    margin-bottom: 40px;
+    padding: 0 8px;
+  }
+  .capture-reminder {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 32px;
+    max-width: 400px;
+    font-size: clamp(0.76rem, 2vw, 0.82rem);
+    color: var(--text-dim);
+    line-height: 1.5;
+    text-align: left;
+  }
+  .capture-reminder strong { color: var(--text); }
+  .capture-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  .start-btn {
+    background: var(--gradient-blush);
+    color: #fff;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 24px rgba(224,122,95,0.3);
+    min-height: 50px;
+    min-width: 140px;
+  }
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 32px rgba(224,122,95,0.4);
+  }
+  .start-btn:active {
+    transform: translateY(0);
+  }
+
+  /* APP */
+  .app { display: none; animation: fadeUp 0.6s ease; }
+  .app.visible { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .header {
+    text-align: center;
+    padding: 36px 24px 28px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+    font-weight: 600;
+    background: var(--gradient-blush);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+  .header-sub {
+    color: var(--text-dim);
+    font-size: clamp(0.68rem, 2vw, 0.78rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    padding: 0 24px;
+    max-width: 600px;
+    margin: 0 auto 8px;
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient-blush);
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: clamp(0.62rem, 1.8vw, 0.7rem);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* PHASE DOTS */
+  .phase-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px 12px 8px;
+    flex-wrap: wrap;
+  }
+  .phase-dot {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: clamp(0.58rem, 1.6vw, 0.68rem);
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all 0.4s ease;
+    cursor: default;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .phase-dot.active-phase { border-color: transparent; }
+  .phase-dot[data-phase="lighthearted"].active-phase {
+    background: rgba(212,168,67,0.15); color: var(--gold); border-color: rgba(212,168,67,0.3);
+  }
+  .phase-dot[data-phase="introspective"].active-phase {
+    background: rgba(142,124,195,0.15); color: var(--lavender); border-color: rgba(142,124,195,0.3);
+  }
+  .phase-dot[data-phase="connection"].active-phase {
+    background: rgba(224,122,95,0.15); color: var(--blush); border-color: rgba(224,122,95,0.3);
+  }
+  .phase-dot[data-phase="heat"].active-phase {
+    background: rgba(199,80,143,0.15); color: var(--rose); border-color: rgba(199,80,143,0.3);
+  }
+
+  /* QUESTION CARD */
+  .container { max-width: 600px; margin: 0 auto; padding: 12px 16px 100px; }
+
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(24px, 5vw, 36px) clamp(18px, 4vw, 28px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    transition: border-color 0.4s ease;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    transition: background 0.4s ease;
+  }
+  .q-card[data-phase="lighthearted"] { border-color: rgba(212,168,67,0.15); }
+  .q-card[data-phase="lighthearted"]::before { background: var(--gradient-gold); }
+  .q-card[data-phase="introspective"] { border-color: rgba(142,124,195,0.15); }
+  .q-card[data-phase="introspective"]::before { background: linear-gradient(135deg, #8e7cc3, #9b59b6); }
+  .q-card[data-phase="connection"] { border-color: rgba(224,122,95,0.15); }
+  .q-card[data-phase="connection"]::before { background: var(--gradient-blush); }
+  .q-card[data-phase="heat"] { border-color: rgba(199,80,143,0.15); }
+  .q-card[data-phase="heat"]::before { background: var(--gradient-deep); }
+
+  .q-number {
+    font-size: clamp(0.58rem, 1.6vw, 0.65rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    line-height: 1.55;
+    font-style: italic;
+    color: var(--text);
+    max-width: 480px;
+  }
+  .q-hint {
+    margin-top: 18px;
+    font-size: clamp(0.72rem, 2vw, 0.78rem);
+    color: var(--text-dim);
+    font-style: normal;
+    line-height: 1.6;
+    max-width: 400px;
+  }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 999px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.82rem, 2.2vw, 0.85rem);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+    min-height: 48px;
+    min-width: 100px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-next {
+    background: var(--gradient-blush);
+    color: #fff;
+    box-shadow: 0 3px 18px rgba(224,122,95,0.25);
+  }
+  .btn-next:hover { transform: translateY(-1px); box-shadow: 0 5px 24px rgba(224,122,95,0.35); }
+  .btn-next:active { transform: translateY(0); }
+  .btn-back {
+    background: var(--surface2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .btn-back:hover { background: var(--surface3); color: var(--text); }
+  .btn-back:active { background: var(--surface3); }
+
+  /* FINALE */
+  .finale {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+    animation: fadeUp 0.8s ease;
+  }
+  .finale.visible { display: block; }
+  .finale h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    background: var(--gradient-deep);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+  }
+  .finale p {
+    color: var(--text-dim);
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+    line-height: 1.8;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 0 8px;
+  }
+  .finale .year-badge {
+    font-size: clamp(2.2rem, 7vw, 3rem);
+    margin-bottom: 12px;
+  }
+
+  /* MOBILE BREAKPOINTS */
+  @media (max-width: 600px) {
+    .header { padding: 28px 16px 20px; }
+    .phase-dots { gap: 4px; padding: 16px 8px 8px; }
+    .phase-dot { padding: 5px 10px; letter-spacing: 0.8px; }
+    .container { padding: 12px 12px 100px; }
+    .progress-wrap { padding: 0 16px; }
+    .intro { padding: 32px 16px; }
+    .capture-reminder { padding: 12px 16px; margin-left: 8px; margin-right: 8px; }
+  }
+
+  @media (max-width: 380px) {
+    .phase-dot { padding: 4px 8px; font-size: 0.55rem; letter-spacing: 0.5px; }
+    .q-card { min-height: 180px; }
+    .btn { padding: 12px 22px; min-height: 44px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="intro" id="intro">
+  <div class="year-badge">1</div>
+  <div class="intro-subtitle">Year of Us</div>
+  <div class="intro-names">Gregg & Anna</div>
+  <div class="intro-note">
+    Twenty questions. No phones after you start — except the one showing this.
+    Take turns reading them out loud.
+    Let the conversation go wherever it wants — the questions are just doors.
+    <br><br>
+    It starts light. It gets real. It ends close.
+  </div>
+  <div class="capture-reminder">
+    <span class="capture-icon">&#x1f399;&#xfe0f;</span>
+    <span>Want to remember tonight? Start a <strong>Voice Memo</strong> or open <strong>Apple Notes</strong> before you begin. Nothing here saves.</span>
+  </div>
+  <button class="start-btn" onclick="startExperience()">Begin</button>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="header">
+    <h1>One Year</h1>
+    <div class="header-sub">Gregg & Anna</div>
+  </div>
+
+  <div class="phase-dots" id="phaseDots">
+    <div class="phase-dot active-phase" data-phase="lighthearted">Lighthearted</div>
+    <div class="phase-dot" data-phase="introspective">Introspective</div>
+    <div class="phase-dot" data-phase="connection">Connection</div>
+    <div class="phase-dot" data-phase="heat">Heat</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 5%"></div></div>
+    <div class="progress-label">
+      <span id="progressPhase">Lighthearted</span>
+      <span id="progressCount">1 of 20</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="q-card" id="qCard" data-phase="lighthearted">
+      <div class="q-number" id="qNumber">Question 1</div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-hint" id="qHint"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-back" id="backBtn" onclick="prevQ()" style="display:none">&#x2190; Back</button>
+      <button class="btn btn-next" id="nextBtn" onclick="nextQ()">Next &#x2192;</button>
+    </div>
+  </div>
+
+  <div class="finale" id="finale">
+    <div class="year-badge">365</div>
+    <h2>Days Down. Infinite to Go.</h2>
+    <p>
+      You just spent twenty questions going from laughter to real talk to heat.
+      That's the whole relationship in miniature.
+      <br><br>
+      Happy one year, you two.
+    </p>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // LIGHTHEARTED (1-5)
+  { phase: "lighthearted", text: "What\u2019s something I did in our first month together that you still think about?", hint: "Could be sweet. Could be ridiculous. Both are good." },
+  { phase: "lighthearted", text: "What\u2019s the funniest miscommunication we\u2019ve ever had?", hint: "Bonus points if you both remember it differently." },
+  { phase: "lighthearted", text: "If you had to describe our relationship as a movie genre, what would it be \u2014 and who\u2019s the lead?", hint: "No wrong answers. But rom-com action thriller is underrated." },
+  { phase: "lighthearted", text: "What\u2019s a weird little habit of mine that you\u2019ve grown to love?", hint: "The stuff that annoyed you at first and now you\u2019d miss." },
+  { phase: "lighthearted", text: "What\u2019s the best meal we\u2019ve shared this year? Close your eyes and put yourself back there.", hint: "Where were you? What were you talking about? What made it special?" },
+
+  // INTROSPECTIVE (6-10)
+  { phase: "introspective", text: "What\u2019s something this relationship has taught you about yourself that surprised you?", hint: "Not about the other person. About you." },
+  { phase: "introspective", text: "Was there a moment this year where you felt really seen by me \u2014 like I understood something about you nobody else does?", hint: "Take your time with this one." },
+  { phase: "introspective", text: "What\u2019s one thing you almost said to me this year but held back?", hint: "This is the safe space to say it. Or to say you\u2019re not ready yet. Both are okay." },
+  { phase: "introspective", text: "How have you changed since we got together \u2014 and how much of that do you think is because of us?", hint: "Growth isn\u2019t always dramatic. Sometimes it\u2019s quiet shifts." },
+  { phase: "introspective", text: "What\u2019s the hardest moment we\u2019ve navigated this year? And what did we learn from it?", hint: "Not to rehash the pain \u2014 but to honor how you got through it." },
+
+  // CONNECTION (11-15)
+  { phase: "connection", text: "When do you feel most connected to me? Not in general \u2014 name a specific moment or situation.", hint: "Be as detailed as you want. The specifics are the good part." },
+  { phase: "connection", text: "What\u2019s something you need from me that you haven\u2019t fully asked for yet?", hint: "Not a complaint. A real request. Start with \u2018I need...\u2019 or \u2018I want...\u2019" },
+  { phase: "connection", text: "If you could relive one single day from our year together, which one \u2014 and why?", hint: "Close your eyes. Go there. Then tell each other." },
+  { phase: "connection", text: "What do you think we do better together than anyone else you know?", hint: "Your superpower as a pair. Name it and own it." },
+  { phase: "connection", text: "One year from tonight \u2014 what does our life look like if everything goes right?", hint: "Dream out loud together. No editing. No \u2018but realistically.\u2019 Just the vision." },
+
+  // HEAT (16-20)
+  { phase: "heat", text: "What\u2019s a moment this year where you looked at me and just\u2026 wanted me?", hint: "Be specific. What was I wearing? Doing? Saying? Where were we?" },
+  { phase: "heat", text: "What\u2019s something I do \u2014 that I probably don\u2019t even realize I\u2019m doing \u2014 that drives you crazy in the best way?", hint: "The unconscious stuff. The stuff that makes you lose your train of thought." },
+  { phase: "heat", text: "Is there something you\u2019ve been curious about trying together but haven\u2019t brought up?", hint: "No judgment zone. Just honesty. This is what year two is for." },
+  { phase: "heat", text: "Describe the perfect version of tonight after we leave this table.", hint: "Take turns. Be as specific \u2014 or as vague \u2014 as the moment calls for." },
+  { phase: "heat", text: "Look at me right now. Tell me one thing you want me to know \u2014 without thinking about it first.", hint: "Put the phone down. Just say it." }
+];
+
+const phaseNames = { lighthearted: "Lighthearted", introspective: "Introspective", connection: "Connection", heat: "Heat" };
+let current = 0;
+
+function startExperience() {
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[current];
+  const card = document.getElementById('qCard');
+  const total = questions.length;
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(10px)';
+  setTimeout(() => {
+    document.getElementById('qNumber').textContent = `Question ${current + 1}`;
+    document.getElementById('qText').textContent = q.text;
+    document.getElementById('qHint').textContent = q.hint;
+    card.setAttribute('data-phase', q.phase);
+    document.getElementById('progressFill').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('progressPhase').textContent = phaseNames[q.phase];
+    document.getElementById('progressCount').textContent = `${current + 1} of ${total}`;
+    document.querySelectorAll('.phase-dot').forEach(d => d.classList.toggle('active-phase', d.dataset.phase === q.phase));
+    document.getElementById('backBtn').style.display = current > 0 ? 'inline-flex' : 'none';
+    document.getElementById('nextBtn').textContent = current === total - 1 ? 'Finish' : 'Next \u2192';
+    card.style.transition = 'all 0.4s ease';
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 200);
+}
+
+function nextQ() {
+  if (current < questions.length - 1) { current++; renderQ(); }
+  else {
+    document.querySelector('.container').style.display = 'none';
+    document.querySelector('.progress-wrap').style.display = 'none';
+    document.getElementById('phaseDots').style.display = 'none';
+    document.getElementById('finale').classList.add('visible');
+  }
+}
+
+function prevQ() { if (current > 0) { current--; renderQ(); } }
+
+document.addEventListener('DOMContentLoaded', () => renderQ());
+</script>
+</body>
+</html>

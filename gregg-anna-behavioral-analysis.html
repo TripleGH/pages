@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gregg & Anna — Behavioral Intelligence Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f14;
+    color: #e0e0e6;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 80px 40px 60px;
+    text-align: center;
+    border-bottom: 2px solid #2a2a4a;
+  }
+  .hero h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #4fc3f7, #ab47bc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  .hero .subtitle {
+    font-size: 1.1rem;
+    color: #8888aa;
+    font-weight: 300;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 6px;
+  }
+  .nav-tab {
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #8888aa;
+    transition: all 0.2s;
+    border: none;
+    background: transparent;
+  }
+  .nav-tab:hover { color: #ccc; background: #2a2a4a; }
+  .nav-tab.active { background: #4fc3f7; color: #0f0f14; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #f0f0f6;
+  }
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: #d0d0e0;
+  }
+
+  .card {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .duo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 700px) { .duo-grid { grid-template-columns: 1fr; } }
+
+  .profile-card {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .profile-card.gregg { border-top: 3px solid #4fc3f7; }
+  .profile-card.anna { border-top: 3px solid #ab47bc; }
+
+  .profile-card h3 {
+    margin-top: 0;
+    font-size: 1.3rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .badge.maverick { background: #1a3a5c; color: #4fc3f7; }
+  .badge.guardian { background: #3a1a4c; color: #ce93d8; }
+
+  .trait-bar {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    font-size: 0.82rem;
+  }
+  .trait-label {
+    width: 100px;
+    text-align: right;
+    padding-right: 10px;
+    color: #8888aa;
+    font-weight: 500;
+  }
+  .trait-track {
+    flex: 1;
+    height: 8px;
+    background: #2a2a4a;
+    border-radius: 4px;
+    position: relative;
+  }
+  .trait-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    position: absolute;
+    top: -3px;
+    transform: translateX(-50%);
+  }
+  .trait-dot.gregg { background: #4fc3f7; }
+  .trait-dot.anna { background: #ab47bc; }
+  .trait-right {
+    width: 100px;
+    padding-left: 10px;
+    color: #8888aa;
+    font-size: 0.82rem;
+  }
+
+  .insight-row {
+    display: flex;
+    gap: 12px;
+    margin: 14px 0;
+    align-items: flex-start;
+  }
+  .insight-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .insight-text { flex: 1; }
+  .insight-text strong { color: #f0f0f6; }
+
+  .tension-card {
+    background: linear-gradient(135deg, #2a1a1a, #1a1a2e);
+    border: 1px solid #4a2a2a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .synergy-card {
+    background: linear-gradient(135deg, #1a2a1a, #1a1a2e);
+    border: 1px solid #2a4a2a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .gap-card {
+    background: linear-gradient(135deg, #2a2a1a, #1a1a2e);
+    border: 1px solid #4a4a2a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin: 2px 2px;
+  }
+  .tag.work { background: #1a3a5c; color: #4fc3f7; }
+  .tag.love { background: #3a1a3a; color: #f48fb1; }
+  .tag.growth { background: #1a3a2a; color: #81c784; }
+  .tag.caution { background: #3a2a1a; color: #ffb74d; }
+
+  .protocol-box {
+    background: #12121e;
+    border-left: 3px solid #4fc3f7;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+  }
+
+  .disclaimer {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 0.82rem;
+    color: #777;
+  }
+
+  ul { padding-left: 20px; margin: 8px 0; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Gregg & Anna</h1>
+  <div class="subtitle">Behavioral Intelligence Report — What These Profiles Reveal, What They Don't, and How to Use Them</div>
+</div>
+
+<div class="container">
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showTab('overview')">The Profiles</button>
+  <button class="nav-tab" onclick="showTab('what-works')">What Works</button>
+  <button class="nav-tab" onclick="showTab('friction')">Friction Points</button>
+  <button class="nav-tab" onclick="showTab('gaps')">Insight Gaps</button>
+  <button class="nav-tab" onclick="showTab('limits')">Limits of This Data</button>
+  <button class="nav-tab" onclick="showTab('playbook')">Playbook</button>
+  <button class="nav-tab" onclick="showTab('domains')">Life Domains</button>
+</div>
+
+<!-- ============ TAB: OVERVIEW ============ -->
+<div class="section active" id="overview">
+<h2>Who You Each Are (According to the Data)</h2>
+
+<div class="duo-grid">
+  <div class="profile-card gregg">
+    <span class="badge maverick">Maverick</span>
+    <h3>Gregg Hinthorn</h3>
+    <p>An innovative, "outside the box" thinker who is undaunted by failure. Very independent, confident, decisive, self-starter, intense and driving. Strong sense of urgency. Competitive, ambitious, venturesome. Responds positively to challenge and pressure. Outgoing, poised, forceful, animated communicator — more authoritative than persuasive. Much a generalist. Concerned with reaching goals, not with the strategies involved.</p>
+    <h3 style="margin-top:20px;">Core Behavioral Scores</h3>
+    <p style="font-size:0.85rem; color:#8888aa;">D: Formality <strong>-1.82σ</strong> (Very Flexible) · A: Dominance <strong>+1.33σ</strong> (Very Independent) · C: Patience <strong>+0.4σ</strong> (Moderately Steady) · B: Extraversion <strong>+0.08σ</strong> (Situationally Reserved) · E: Objectivity <strong>+0.83σ</strong> (Objective)</p>
+    <div class="protocol-box" style="margin-top:16px;">
+      <strong>How to interact with Gregg:</strong> Give me flexibility. Let me drive. Give me stability. Let me talk it out.
+    </div>
+  </div>
+
+  <div class="profile-card anna">
+    <span class="badge guardian">Guardian</span>
+    <h3>Anna Griffin</h3>
+    <p>A Guardian is unselfish and approachable with a preference for detailed, skill-based work. Very conscientious and disciplined. Particularly careful, thorough, and accurate. Exacting — strives to produce results that precisely meet established goals. Works best with clear standards, expectations, and structure. Stable, dependable, consistent. Rather unobtrusive and quiet; friendly and pleasant with people she knows well. Reserved and polite with new people. Strong sense of propriety and doing the right thing.</p>
+    <h3 style="margin-top:20px;">Core Behavioral Scores</h3>
+    <p style="font-size:0.85rem; color:#8888aa;">D: Formality <strong>+1.09σ</strong> (Moderately Precise) · A: Dominance <strong>-0.77σ</strong> (Moderately Collaborative) · B: Extraversion <strong>-0.52σ</strong> (Moderately Reserved) · C: Patience <strong>+0.19σ</strong> (Situationally Driving) · E: Objectivity <strong>+0.03σ</strong> (Balanced)</p>
+    <div class="protocol-box" style="margin-top:16px; border-left-color: #ab47bc;">
+      <strong>How to interact with Anna:</strong> Give me structure. Let me collaborate. Let me think it through. Give me stability.
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:24px;">
+<h3 style="margin-top:0;">Side-by-Side Behavioral Spectrum</h3>
+<p style="font-size:0.82rem; color:#8888aa; margin-bottom:16px;"><span style="color:#4fc3f7;">● Gregg</span>&nbsp;&nbsp;&nbsp;<span style="color:#ab47bc;">● Anna</span></p>
+
+<div class="trait-bar">
+  <div class="trait-label">Collaborative</div>
+  <div class="trait-track">
+    <div class="trait-dot anna" style="left: 72%;"></div>
+    <div class="trait-dot gregg" style="left: 22%;"></div>
+  </div>
+  <div class="trait-right">Independent</div>
+</div>
+<div class="trait-bar">
+  <div class="trait-label">Reserved</div>
+  <div class="trait-track">
+    <div class="trait-dot anna" style="left: 38%;"></div>
+    <div class="trait-dot gregg" style="left: 52%;"></div>
+  </div>
+  <div class="trait-right">Sociable</div>
+</div>
+<div class="trait-bar">
+  <div class="trait-label">Driving</div>
+  <div class="trait-track">
+    <div class="trait-dot anna" style="left: 53%;"></div>
+    <div class="trait-dot gregg" style="left: 42%;"></div>
+  </div>
+  <div class="trait-right">Steady</div>
+</div>
+<div class="trait-bar">
+  <div class="trait-label">Flexible</div>
+  <div class="trait-track">
+    <div class="trait-dot anna" style="left: 62%;"></div>
+    <div class="trait-dot gregg" style="left: 10%;"></div>
+  </div>
+  <div class="trait-right">Precise</div>
+</div>
+<div class="trait-bar">
+  <div class="trait-label">Subjective</div>
+  <div class="trait-track">
+    <div class="trait-dot anna" style="left: 50%;"></div>
+    <div class="trait-dot gregg" style="left: 63%;"></div>
+  </div>
+  <div class="trait-right">Objective</div>
+</div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">The Headline Dynamic</h3>
+<p>These two profiles are <strong>almost mirror images</strong> on the most consequential axis: Formality and Dominance. Gregg is maximally flexible and very independent. Anna is moderately precise and moderately collaborative. This is the engine of both your greatest strengths as a pair and your most predictable friction. The Relationship Guide literally frames Gregg as the initiator-driver and Anna as the structure-quality gatekeeper — and that polarity is the story of everything below.</p>
+</div>
+</div>
+
+<!-- ============ TAB: WHAT WORKS ============ -->
+<div class="section" id="what-works">
+<h2>What Works Between You</h2>
+
+<div class="synergy-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#9889;</div>
+    <div class="insight-text">
+      <strong>Vision + Execution Completeness</strong><br>
+      Gregg generates ideas, spots trends, pushes for change, and drives toward goals without getting bogged in details. Anna takes those ideas and makes them <em>real</em> — building the plan, checking the details, ensuring quality. Together you cover the full lifecycle of getting anything done. Alone, Gregg might launch something half-baked; Anna might never launch at all. This is genuinely one of the strongest complementary pairings the assessment can produce.
+      <div style="margin-top:8px;"><span class="tag work">Work</span> <span class="tag growth">Growth</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="synergy-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#128172;</div>
+    <div class="insight-text">
+      <strong>Gregg Starts, Anna Refines — Communication</strong><br>
+      The Relationship Guide notes Gregg is the natural "communication initiator" and Anna is the one who translates broad ideas into specifics. Gregg can discuss broad ideas; Anna is good at translating Gregg's suggestions into specifics. This works as long as Gregg doesn't dominate the agenda (a flagged risk) and Anna actually voices her ideas rather than deferring (also flagged).
+      <div style="margin-top:8px;"><span class="tag love">Relationship</span> <span class="tag work">Work</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="synergy-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#129309;</div>
+    <div class="insight-text">
+      <strong>Mutual Patience and Respect</strong><br>
+      The guide explicitly states you are "patient, respectful, and accepting" with each other, and that if you disagree, you do so constructively. This is not a given — many complementary profiles clash hard. This baseline of respect is the foundation everything else rests on.
+      <div style="margin-top:8px;"><span class="tag love">Relationship</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="synergy-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#128737;</div>
+    <div class="insight-text">
+      <strong>Risk Calibration</strong><br>
+      Gregg is "comfortable with risk," "undaunted by failure," and makes decisions with little proof. Anna is "cautious with risk," does background research, and needs proof before acting. Together, you can make bold moves that are actually vetted. The danger is if Gregg dismisses Anna's caution as foot-dragging, or Anna reads Gregg's boldness as recklessness.
+      <div style="margin-top:8px;"><span class="tag work">Work</span> <span class="tag growth">Growth</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="synergy-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#127968;</div>
+    <div class="insight-text">
+      <strong>Shared Need for Stability</strong><br>
+      Despite massive differences in style, you both register a need for stability, familiar surroundings, and long-term affiliation. This is an anchor. Neither of you is flighty. The commitment infrastructure is there on both sides.
+      <div style="margin-top:8px;"><span class="tag love">Relationship</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ TAB: FRICTION ============ -->
+<div class="section" id="friction">
+<h2>Predictable Friction Points</h2>
+
+<div class="tension-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#9888;&#65039;</div>
+    <div class="insight-text">
+      <strong>Speed vs. Thoroughness — The Core Tension</strong><br>
+      This is the big one. Gregg's profile says he is "restless and dissatisfied if required to work under close control or to do work which is routine." Anna's profile says she "works best where there are clear standards, expectations, reporting relationships and measurements." Gregg wants to move fast and break things. Anna wants to move carefully and build things right. Neither is wrong. But without active management of this gap, Gregg will feel slowed down and Anna will feel steamrolled.
+      <div style="margin-top:8px;"><span class="tag caution">High Impact</span> <span class="tag work">Work</span> <span class="tag love">Relationship</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tension-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#128263;</div>
+    <div class="insight-text">
+      <strong>Agenda Dominance</strong><br>
+      The Relationship Guide directly flags: "Gregg may dominate the agenda, and Anna's ideas or concerns may get overlooked." Gregg's communication is "direct, to the point, and sometimes brusque." Anna is "reserved and polite." If Gregg is always steering the conversation, Anna will quietly disengage rather than fight for airtime — and Gregg won't notice until the distance is already built.
+      <div style="margin-top:8px;"><span class="tag caution">High Impact</span> <span class="tag love">Relationship</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tension-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#128556;</div>
+    <div class="insight-text">
+      <strong>Anna May Withdraw; Gregg May Not Notice</strong><br>
+      The guide warns: "Anna may be overwhelmed by Gregg's eagerness to have a conversation, and Anna may politely seek to shorten or avoid interaction with Gregg." Anna's avoidance pattern is subtle — she goes quiet, not loud. Gregg's profile says he "may appear tough-minded" and "can be intolerant of and frustrated by delays." This mismatch means Anna's withdrawal signal and Gregg's attention signal are on different frequencies.
+      <div style="margin-top:8px;"><span class="tag caution">High Impact</span> <span class="tag love">Relationship</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tension-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#128580;</div>
+    <div class="insight-text">
+      <strong>Sensitive Topics Get Slow-Walked</strong><br>
+      The guide flags that "both are overly cautious about how to approach the discussion" on difficult or sensitive topics. Gregg's directness evaporates when feelings are at stake. Anna already avoids conflict. The result: important emotional conversations may never actually happen — not because either person is unwilling, but because both are tiptoeing around the same thing from different sides.
+      <div style="margin-top:8px;"><span class="tag caution">Medium Impact</span> <span class="tag love">Relationship</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tension-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#128203;</div>
+    <div class="insight-text">
+      <strong>Detail Orientation Gap</strong><br>
+      Gregg's follow-up is "quick and cursory" — he's likely to consider details "minutiae." Anna's follow-through is "deep and literal to ensure tasks were completed in accordance with quality standards." If Anna is relying on Gregg to handle the details, she'll be disappointed. If Gregg expects Anna to just roll with ambiguity, she'll freeze.
+      <div style="margin-top:8px;"><span class="tag work">Work</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ TAB: GAPS ============ -->
+<div class="section" id="gaps">
+<h2>Insight Gaps — What This Data Cannot Tell You</h2>
+<p style="margin-bottom: 20px; color: #aaa;">These are the things that <em>matter enormously</em> for productivity, happiness, love, and partnership — but that a behavioral assessment simply does not measure.</p>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Emotional Intelligence & Attachment Style</strong><br>
+      The profiles measure <em>behavioral tendencies</em> — how you act. They do not measure <em>why</em> you act that way, what triggers you emotionally, how you handle emotional flooding, what your attachment pattern is (anxious, avoidant, secure, disorganized), or how you repair after conflict. Anna's "avoidance of conflict" and Gregg's "tough-mindedness" could mean radically different things depending on attachment history. This is arguably the #1 gap for relationship quality.
+    </div>
+  </div>
+</div>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Values, Meaning & Purpose Alignment</strong><br>
+      The profiles tell you <em>how</em> each person works and communicates. They say nothing about <em>what</em> you each care about — shared values around family, money, ambition, faith, community, legacy, adventure, health. Two people can be behaviorally complementary and yet fundamentally misaligned on what they're building toward. Or they can be behaviorally opposite and deeply united in purpose. This data can't tell you which you are.
+    </div>
+  </div>
+</div>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Love Languages & Intimacy Needs</strong><br>
+      Nothing in these profiles addresses how you each feel loved, what physical affection means to you, how you express desire, what "connection" actually looks like in practice. Gregg wanting "flexibility" and Anna wanting "structure" might translate into very different intimacy patterns — but the data doesn't go there. This matters for sex, romance, daily affection, and long-term desire.
+    </div>
+  </div>
+</div>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Stress Response & Coping Under Pressure</strong><br>
+      The profiles describe how you behave in <em>normal operating conditions</em>. They hint at stress patterns (Gregg gets "restless"; Anna "may struggle in ambiguous situations") but don't model what happens when someone is truly overwhelmed, grieving, financially stressed, or in a health crisis. Your worst moments as a couple will not be predicted by this data.
+    </div>
+  </div>
+</div>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Personal History, Trauma & Growth Edges</strong><br>
+      Why is Anna cautious? Personality? Past experience? Trauma? Why does Gregg push through failure without flinching? Resilience? Avoidance? The behavioral score can't distinguish. Understanding <em>where</em> a pattern comes from changes how you should respond to it. A partner who is cautious due to past betrayal needs different things than one who is cautious by temperament.
+    </div>
+  </div>
+</div>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Cognitive Style & Intelligence Profile</strong><br>
+      The profiles describe communication and work style but not how each person actually <em>thinks</em>. Are you both verbal processors or does one need to write things out? Does one of you think in systems and the other in narratives? How does each person learn? These matter enormously for daily problem-solving together.
+    </div>
+  </div>
+</div>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Sexuality, Desire & Physical Connection</strong><br>
+      Not remotely addressed. Yet physical connection is a major driver of relationship satisfaction, and behavioral styles (Gregg's spontaneity vs. Anna's need for predictability) will absolutely show up in this domain. Worth exploring directly.
+    </div>
+  </div>
+</div>
+
+<div class="gap-card">
+  <div class="insight-row">
+    <div class="insight-icon">&#10067;</div>
+    <div class="insight-text">
+      <strong>Financial Alignment & Risk Tolerance (Beyond Work)</strong><br>
+      Gregg's risk tolerance at work is high. Anna's is low. But do those patterns hold for personal finances? Spending habits? Investment philosophy? The profiles measure work-context behavior. Money is one of the top relationship stressors and this data offers only circumstantial hints.
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ TAB: LIMITS ============ -->
+<div class="section" id="limits">
+<h2>How This Data Will NOT Be Helpful</h2>
+
+<div class="card">
+<h3 style="margin-top:0;">What These Profiles Are</h3>
+<p>These are behavioral assessments — likely based on the PDP (Professional DynaMetric Programs) or a similar DISC-adjacent framework. They measure <strong>observable behavioral tendencies</strong> along 4-5 dimensions. They are self-reported. They were assessed on a single day (Anna: Jan 9, 2026; Gregg: Feb 11, 2026). They are descriptive, not prescriptive.</p>
+
+<h3>Specifically, Do Not Use This Data To...</h3>
+<ul>
+  <li><strong>Predict specific outcomes.</strong> "Gregg is a Maverick" does not mean he will always act boldly. These are tendencies, not determinism. On any given Tuesday, either of you might behave completely out of character.</li>
+  <li><strong>Win an argument.</strong> "Your profile says you avoid conflict" is not a valid point in a disagreement. Using assessment data as ammunition will destroy trust faster than any behavioral mismatch.</li>
+  <li><strong>Excuse behavior.</strong> "That's just how I am" is never a complete sentence when it follows hurting someone. The profiles describe defaults, not ceilings.</li>
+  <li><strong>Replace actual conversation.</strong> These reports are a <em>map</em>. The territory is the lived experience of your relationship. If the map says one thing and reality says another, trust reality.</li>
+  <li><strong>Diagnose clinical issues.</strong> These are not psychological assessments. They don't measure anxiety, depression, ADHD, trauma response, or any clinical dimension. If something feels bigger than "behavioral style," get professional support.</li>
+  <li><strong>Assess compatibility.</strong> There is no valid "compatibility score" derivable from these profiles. Complementary profiles can thrive or implode. Similar profiles can mesh or bore each other. The work of the relationship determines outcomes, not the starting positions.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">The Self-Concept Gap (Both Profiles Show One)</h3>
+<p>Both profiles include a "Self" graph and a "Self-Concept" graph. The Self is how you actually behave. The Self-Concept is how you <em>think</em> you behave — your aspirational or idealized self-image. Where these diverge is interesting:</p>
+<ul>
+  <li><strong>Gregg's gap:</strong> His Self-Concept shows himself slightly more collaborative and more sociable than his actual behavior scores. He may believe he's more of a team player than he actually comes across as.</li>
+  <li><strong>Anna's gap:</strong> Her Self-Concept shows herself slightly more independent and sociable than her behavior. She may aspire to more assertiveness and social ease than she currently demonstrates.</li>
+</ul>
+<p style="margin-top: 12px;">These gaps are <em>growth edges</em>. They show where each person is already reaching — and where a supportive partner can help.</p>
+</div>
+</div>
+
+<!-- ============ TAB: PLAYBOOK ============ -->
+<div class="section" id="playbook">
+<h2>The Practical Playbook</h2>
+
+<div class="card">
+<h3 style="margin-top:0;">Communication Protocols</h3>
+
+<div class="protocol-box">
+  <strong>For Gregg → Anna:</strong> Set up a time to talk rather than dropping by spontaneously. Let her think before responding. Don't interpret silence as agreement or disinterest. Ask "What's your take on this?" and then actually wait. When she offers a concern, treat it as a gift, not a speed bump.
+</div>
+
+<div class="protocol-box" style="border-left-color: #ab47bc;">
+  <strong>For Anna → Gregg:</strong> Don't assume he knows you disagree if you haven't said it out loud. Be direct even when it feels uncomfortable — he actually respects directness. If you need time to think, say "I need to think about this" rather than going quiet. Make the effort to ask him for his feedback or opinions, too.
+</div>
+
+<div class="protocol-box" style="border-left-color: #81c784;">
+  <strong>Both:</strong> Be clear on action items and next steps at the end of every important conversation. Gregg focuses on the goal; Anna focuses on the plan. Name both.
+</div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Decision-Making Framework</h3>
+<p>Given your profiles, here's a decision-making structure that plays to both strengths:</p>
+<ol style="padding-left: 20px;">
+  <li style="margin: 8px 0;"><strong>Gregg opens:</strong> Frames the opportunity, the vision, the "why now." This is where his pattern-recognition and urgency add value.</li>
+  <li style="margin: 8px 0;"><strong>Anna pressure-tests:</strong> Asks the questions Gregg's profile says he'll skip — What are the risks? What's the plan? What evidence do we have? This is not foot-dragging; this is quality control.</li>
+  <li style="margin: 8px 0;"><strong>Joint decision:</strong> Agree on a go/no-go with a defined scope. Gregg's instinct is to go big; Anna's is to go safe. The right answer is usually somewhere between.</li>
+  <li style="margin: 8px 0;"><strong>Gregg drives execution broadly;</strong> Anna manages details and follow-through. Gregg delegates details — Anna is the person he should delegate <em>to</em> (or at least consult with on quality).</li>
+</ol>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Conflict Resolution</h3>
+<p>Your specific risk pattern: Gregg pushes, Anna retreats, the issue goes underground, resentment builds. Here's the override:</p>
+<div class="protocol-box" style="border-left-color: #ffb74d;">
+  <strong>The 24-Hour Rule:</strong> If either of you notices a topic being avoided, it gets scheduled (not ambushed) within 24 hours. Anna gets a heads-up so she can prepare. Gregg gets a defined time so he doesn't stew. The conversation starts with "Here's what I'm feeling" not "Here's what you did."
+</div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Recognition & Motivation</h3>
+<div class="duo-grid">
+  <div>
+    <strong style="color: #4fc3f7;">Gregg is motivated by:</strong>
+    <ul>
+      <li>Autonomy and flexibility</li>
+      <li>Challenge and variety</li>
+      <li>Recognition, advancement, tangible rewards</li>
+      <li>Opportunities to express and act on his own ideas</li>
+    </ul>
+  </div>
+  <div>
+    <strong style="color: #ab47bc;">Anna is motivated by:</strong>
+    <ul>
+      <li>Clear expectations and structure</li>
+      <li>Expressions of recognition for good work and cooperative attitude</li>
+      <li>Stable, supportive relationships</li>
+      <li>Opportunity to leverage specialized skill and experience</li>
+    </ul>
+  </div>
+</div>
+<p style="margin-top: 16px; color: #aaa;">Translation: Gregg, tell Anna specifically what she did well and that you appreciate her thoroughness. Anna, give Gregg room to run and tell him when his ideas are exciting. These are cheap, high-return investments.</p>
+</div>
+</div>
+
+<!-- ============ TAB: DOMAINS ============ -->
+<div class="section" id="domains">
+<h2>Across Life Domains</h2>
+
+<div class="card">
+<h3 style="margin-top:0;">Productivity & Work Together</h3>
+<p>You have one of the strongest possible pairings for <em>getting things done</em> — if you respect the division. Gregg's profile is built for ideation, direction-setting, networking, sales, and high-level strategy. Anna's is built for planning, quality control, execution, and process. The Relationship Guide confirms Gregg can discuss broad ideas and Anna is good at translating those into specifics.</p>
+<p style="margin-top:10px;"><strong>The trap:</strong> Gregg tries to micromanage (despite hating it himself) or Anna feels she's "just the executor." Both need to feel ownership. Define clear lanes and give each other authority within them.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Happiness & Joy</h3>
+<p>Gregg's happiness comes from movement, novelty, challenge, autonomy. Anna's comes from stability, mastery, being valued, familiar people and environments. Joy for both is possible — but it won't always look the same. Gregg may need to find his adventure externally sometimes rather than always dragging Anna into the new thing. Anna may need to stretch into occasional spontaneity as a gift. Neither should have to become the other.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Love & Intimacy</h3>
+<p>The data doesn't directly address this, but behavioral patterns absolutely project here. Gregg's spontaneity, directness, and intensity will show up in how he initiates and expresses affection. Anna's need for safety, predictability, and "proof before trust" will show up in what makes her feel safe enough to be vulnerable. The biggest behavioral insight for intimacy: <strong>Anna needs to feel emotionally safe before she can be physically or emotionally open, and Gregg needs to feel like things are moving and alive.</strong> Both are valid. Neither cancels the other.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Sex & Physical Connection</h3>
+<p>This is entirely outside the assessment's scope — but the behavioral patterns <em>suggest</em> dynamics worth exploring openly: Gregg's profile leans toward spontaneity and intensity; Anna's leans toward comfort, familiarity, and feeling valued. If those tendencies hold, talking about this directly (what you each want, when, how, what makes it feel safe vs. exciting) is worth more than any profile could ever offer. This is a domain where the data gives you <em>hypotheses</em> at best — not answers.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Parenting, Family & Social Life</h3>
+<p>Gregg will likely be the one pushing for new experiences, broader social circles, and big-picture family direction. Anna will likely be the one ensuring structure, follow-through, and emotional consistency. Both matter enormously. The risk is that Gregg feels like Anna is "too cautious" with the kids and Anna feels Gregg is "too loose." Naming this pattern early means you can make it a feature, not a fight.</p>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0;">Financial Life</h3>
+<p>Gregg is comfortable with risk and makes fast decisions. Anna needs proof, research, and a plan. For financial decisions: use Anna's process and Gregg's instinct. Anna runs the analysis; Gregg asks "what are we missing?" and pushes for action once the data supports it. Neither one solo has the ideal financial temperament — together you do.</p>
+</div>
+</div>
+
+<!-- ============ BOTTOM SECTION ============ -->
+<div class="disclaimer">
+<strong>A note on the nature of this analysis.</strong> This report synthesizes insights from three behavioral assessment documents (two individual PDP-style profiles and one relationship guide). The behavioral data is useful as a starting framework for understanding patterns, preferences, and potential friction — but it is a single-day self-report instrument measuring observable behavioral tendencies in primarily work-oriented contexts. It does not measure personality, intelligence, values, emotional health, attachment style, sexuality, trauma history, or clinical dimensions. The most important things about your relationship cannot be measured by any assessment. Use this as a conversation-starter, not a verdict.
+</div>
+
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
